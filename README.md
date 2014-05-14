@@ -61,6 +61,51 @@ function.
             x$setmean(m)
             m
     }
+    
+    
+And here is how it is used
+
+    inThisEnvironment <- makeVector()
+
+makeVector returns a list of four functions.  
+
+    names(inThisEnvironment)
+    [1] "set"     "get"     "setmean" "getmea
+
+We can access each of these functions using the $ notation:
+
+    inThisEnvironment$set(1:10)
+
+Importantly, all of these functions were created inside the same function; as a result, they all have the same environment.  That means that free variables in these functions will be searched for in this environment (which I have called "inThisEnvironment".  This is just a variable name - it could just as well be called "foo" or "a").
+
+    inThisEnvirnment$get()
+    [1]  1  2  3  4  5  6  7  8  9 10
+    
+We can set up multiple versions of the same four functions, each with its own unique environment.
+
+    inAseparateEnvironment <- makeVector()
+    inAseparateEnvironment$set(11:20)
+    inAseparateEnvironment$get()
+    [1] 10 11 12 13 14 15 16 17 18 19 20
+
+Finally, there are two other functions in each of these environments. We can set the mean
+
+    inThisEnvironment$setmean(5.5)
+    
+And we can get the mean from that environment
+
+    inThisEnvironment$getmean()
+    5.5
+    
+We can take a closer look at this function by leaving the brackets out
+
+    inThisEnvironment$getmean
+    function() m
+    <environment: 0x7fa8f3043ff8>
+    
+This function does one simple thing; it returns the value of m.  But that value for m comes from a specific environment.
+That environment has a name (an internal name used by R).  The name is: 0x7fa8f3043ff8.
+
 
 ### Assignment: Caching the Inverse of a Matrix
 
