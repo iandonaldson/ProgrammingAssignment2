@@ -44,6 +44,8 @@ really a list containing a function to
                  setmean = setmean,
                  getmean = getmean)
     }
+
+## An explanation of makeVector - added by ian
     
 And here is how it is used
 
@@ -114,6 +116,8 @@ all it does is return the value of x that defined by the `set` function in the s
 
 The same principals apply to the explanation of the `setmean` and `getmean` functions.
 
+# end explanation added by ian
+
 ## cachemean
 
 The following function calculates the mean of the special "vector"
@@ -136,7 +140,40 @@ function.
     }
     
     
+## An explanation of cachemean - added by ian
 
+Here is how cachemean would be used (following on with the above example)
+
+    cachemean(inThisEnvironment)
+    [1] 5.5
+
+In this case, we already defined the value of the mean associated with this environment.  So this value is retuned to us using the lines
+
+            m <- x$getmean()
+            if(!is.null(m)) {
+                    message("getting cached data")
+                    return(m)
+            }
+
+    
+Here, `x` is `inThisEnvironment` that we passed to the function.
+
+But what if we had not defined the mean of our vector.  Lets start with a new vector in its own environment.
+
+    > inAnewEnvironment <- makeVector(100:150)
+    > cachemean(inAnewEnvironment)
+    [1] 125
+
+What happened here was that we created the vector `100:150` in its own private environment.  The function call to
+
+    x$getmean()
+    
+will query this environment and find a NULL value.  The next few lines will then calculate the mean (in this environment) and return it to us. 
+
+
+Subsequent calls to `cachemean(inAnewEnvironment)` will find this value (using the line `x$getmean()`) since it is now effectively cached in this environment as variable `m`.
+
+# end explanation added by ian
 
 
 ### Assignment: Caching the Inverse of a Matrix
